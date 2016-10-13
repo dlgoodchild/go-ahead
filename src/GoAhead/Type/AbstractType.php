@@ -104,6 +104,15 @@ abstract class AbstractType {
 	abstract public function isValid(): bool;
 
 	/**
+	 * @param bool $bIsRequired
+	 * @return AbstractType
+	 */
+	public function setIsRequired( bool $bIsRequired ): AbstractType {
+		$this->bIsRequired = $bIsRequired;
+		return $this;
+	}
+
+	/**
 	 * @param string $sName
 	 * @return AbstractType
 	 */
