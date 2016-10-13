@@ -1,0 +1,26 @@
+{
+	"name": "dlgoodchild/go-ahead",
+	"type": "library",
+	"description": "Go Ahead - Flexible request validation library for PHP",
+	"keywords": [],
+	"homepage": "http://davegoodchild.co.uk",
+	"license": "GNU",
+	"authors": [
+		{
+			"name": "Dave Goodchild",
+			"email": "me@davegoodchild.co.uk"
+		}
+	],
+	"require": {
+		"php": ">=7.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"DLGoodchild\\": "src/"
+		},
+		"exclude-from-classmap": [
+			"/Tests/"
+		]
+	},
+	"minimum-stability": "dev"
+}

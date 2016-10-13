@@ -1,7 +1,7 @@
 
 #### Usage
 ```
-$oValidate = new GoAhead\RequestValidation(
+$oValidate = new GoAhead\Validation(
 	array(
 		'account_id' => 'record:0', // default value is 0, meaning it's not required
 		'email' => array(
