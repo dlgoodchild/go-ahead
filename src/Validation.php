@@ -72,6 +72,7 @@ class Validation {
 
 			$aField['message'] = $aField['message'] ?? '';
 			$aField['name'] = $sKey;
+			$aField['state'] = '';
 
 			$aDefinition[$sKey] = $aField;
 		}
@@ -83,17 +84,38 @@ class Validation {
 	 * @return bool
 	 */
 	public function on( array $aAssocData ): bool {
-		$aResults = array();
+		$bIsValid = true;
 		foreach ( $this->aDefinition as $aField ) {
 			if ( !isset( $aAssocData[$aField['name']] ) ) {
-				// add the result with missing field name
+				$aField['state'] = 'missing';
+				$bIsValid = false;
 			}
 			else {
 				$aField['instance']->setValue( $aAssocData[$aField['name']] );
-				// validate
+				$aField['state'] = $aField['instance']->isValid()? 'valid': 'invalid';
+				if ( $aField['state'] == 'invalid' ) {
+					$bIsValid = false;
+				}
 			}
 		}
+		return $bIsValid;
+	}
 
-		return true;
+	/**
+	 * @return array
+	 */
+	public function report(): array {
+		$aResult = array();
+		foreach ( $this->aDefinition as $aField ) {
+			if ( $aField['state'] !== 'valid' ) {
+				$aResult[] = array(
+					'name' => $aField['name'],
+					'state' => $aField['state'],
+					'message' => $aField['instance']->getValidationMessage(),
+					'value' => $aField['instance']->getValue()
+				);
+			}
+		}
+		return $aResult;
 	}
 }
