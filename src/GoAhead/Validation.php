@@ -106,7 +106,7 @@ class Validation {
 	 */
 	public function report(): array {
 		$aResult = array();
-		
+
 		foreach ( $this->aDefinition as $aField ) {
 			if ( $aField['state'] !== 'valid' ) {
 				$aResult[] = array(
