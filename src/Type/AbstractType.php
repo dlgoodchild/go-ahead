@@ -27,7 +27,7 @@ abstract class AbstractType {
 	 * @param mixed $mValue
 	 * @param bool $bIsRequired
 	 */
-	public function __construct( $mValue, bool $bIsRequired = true ) {
+	public function __construct( $mValue = null, bool $bIsRequired = true ) {
 		$this->mValue = $mValue;
 		$this->bIsRequired = $bIsRequired;
 	}

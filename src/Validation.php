@@ -9,14 +9,20 @@ namespace DLGoodchild\GoAhead;
 class Validation {
 
 	/**
+	 * @const string
+	 */
+	public const DiscardUnknown = 'discard';
+
+	/**
 	 * @var array
 	 */
 	protected $aDefinition;
 
 	/**
 	 * @param array $aDefinition
+	 * @param string $sOption
 	 */
-	public function __construct( array $aDefinition ) {
+	public function __construct( array $aDefinition, string $sOption = '' ) {
 		$this->aDefinition = $this->parseDefinition( $aDefinition );
 	}
 
@@ -31,9 +37,45 @@ class Validation {
 	/**
 	 * @param array $aDefinition
 	 * @return array
+	 * @throws \Exception
 	 */
 	private function parseDefinition( array $aDefinition ): array {
-		return $aDefinition;
+		foreach ( $aDefinition as $sKey => $aField ) {
+			if ( is_string( $aField ) ) {
+				$aField = explode( ':', trim( $aField, ': ' ), 2 );
+				$aField = array(
+					'type' => $aField[0],
+					'default' => trim( $aField[1] ?? '' ),
+					'required' => !isset( $aField[1] )
+				);
+			}
+
+			if ( !isset( $aField['type'] ) ) {
+				throw new \Exception( 'Invalid field definition' );
+			}
+
+			if ( is_string( $aField['type'] ) ) {
+				$aField['classname'] = str_replace( ' ', '', ucwords( str_replace( '_', ' ', strtolower( trim( $aField['type'] ) ) ) ) ).'Type';
+				$sClass = sprintf( '\DLGoodchild\GoAhead\Type\%s', $aField['classname'] );
+				if ( !class_exists( $sClass ) ) {
+					throw new \Exception( sprintf( 'Unknown field type supplied (%s)', $sClass ) );
+				}
+				$aField['instance'] = new $sClass;
+			}
+			else if ( is_object( $aField['type'] ) ) {
+				$aField['instance'] = $aField['type'];
+				$aField['type'] = '_anon';
+				$aField['classname'] = get_class( $aField['type'] );
+			}
+
+			$aField['instance']->setIsRequired( $aField['required'] );
+
+			$aField['message'] = $aField['message'] ?? '';
+			$aField['name'] = $sKey;
+
+			$aDefinition[$sKey] = $aField;
+		}
+		return array_values( $aDefinition );
 	}
 
 	/**
@@ -41,7 +83,17 @@ class Validation {
 	 * @return bool
 	 */
 	public function on( array $aAssocData ): bool {
-		
+		$aResults = array();
+		foreach ( $this->aDefinition as $aField ) {
+			if ( !isset( $aAssocData[$aField['name']] ) ) {
+				// add the result with missing field name
+			}
+			else {
+				$aField['instance']->setValue( $aAssocData[$aField['name']] );
+				// validate
+			}
+		}
+
 		return true;
 	}
 }
