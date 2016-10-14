@@ -2,6 +2,8 @@
 
 namespace DLGoodchild\GoAhead;
 
+use DLGoodchild\GoAhead\Type\AbstractType;
+
 /**
  * Class Validation
  * @package DLGoodchild\GoAhead
@@ -63,6 +65,9 @@ class Validation {
 				$aField['instance'] = new $sClass;
 			}
 			else if ( is_object( $aField['type'] ) ) {
+				if ( !( $aField['type'] instanceof AbstractType ) ) {
+					throw new \Exception( 'The anonymous class instance must inherit from AbstractType.' );
+				}
 				$aField['instance'] = $aField['type'];
 				$aField['type'] = '_anon';
 				$aField['classname'] = get_class( $aField['type'] );
