@@ -85,7 +85,7 @@ class Validation {
 	 */
 	public function on( array $aAssocData ): bool {
 		$bIsValid = true;
-		foreach ( $this->aDefinition as $aField ) {
+		foreach ( $this->aDefinition as &$aField ) {
 			if ( !isset( $aAssocData[$aField['name']] ) ) {
 				$aField['state'] = 'missing';
 				$bIsValid = false;
