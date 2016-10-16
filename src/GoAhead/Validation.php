@@ -18,7 +18,12 @@ class Validation {
 	/**
 	 * @var array
 	 */
-	protected $aDefinition;
+	private $aDefinition;
+
+	/**
+	 * @var bool
+	 */
+	private $bIsValid;
 
 	/**
 	 * @param array $aDefinition
@@ -34,6 +39,13 @@ class Validation {
 	 */
 	public function __invoke( array $aAssocData ): bool {
 		return $this->on( $aAssocData );
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isValid(): bool {
+		return $this->bIsValid;
 	}
 
 	/**
@@ -58,6 +70,7 @@ class Validation {
 
 			if ( is_string( $aField['type'] ) ) {
 				$aField['classname'] = str_replace( ' ', '', ucwords( str_replace( '_', ' ', strtolower( trim( $aField['type'] ) ) ) ) ).'Type';
+				// todo: handle custom namespaces
 				$sClass = sprintf( '\DLGoodchild\GoAhead\Type\%s', $aField['classname'] );
 				if ( !class_exists( $sClass ) ) {
 					throw new \Exception( sprintf( 'Unknown field type supplied (%s)', $sClass ) );
@@ -103,7 +116,7 @@ class Validation {
 				}
 			}
 		}
-		return $bIsValid;
+		return ( $this->bIsValid = $bIsValid );
 	}
 
 	/**
