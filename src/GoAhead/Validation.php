@@ -93,6 +93,7 @@ class Validation {
 				$aField['classname'] = get_class( $aField['type'] );
 			}
 
+			$aField['instance']->setName( $aField['name'] );
 			$aField['instance']->setIsRequired( $aField['required'] );
 
 			$aField['message'] = $aField['message'] ?? '';
