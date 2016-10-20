@@ -38,7 +38,14 @@ class Validation {
 	 * @return bool
 	 */
 	public function __invoke( array $aAssocData ): bool {
-		return $this->on( $aAssocData );
+		return ( $this->on( $aAssocData )->isValid() );
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getFields() {
+		return $this->aDefinition;
 	}
 
 	/**
