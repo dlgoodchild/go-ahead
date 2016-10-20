@@ -93,7 +93,6 @@ class Validation {
 				$aField['classname'] = get_class( $aField['type'] );
 			}
 
-			$aField['instance']->setName( $aField['name'] );
 			$aField['instance']->setIsRequired( $aField['required'] );
 
 			$aField['message'] = $aField['message'] ?? '';
@@ -117,7 +116,9 @@ class Validation {
 				$bIsValid = false;
 			}
 			else {
+				$aField['instance']->setName( $aField['name'] );
 				$aField['instance']->setValue( $aAssocData[$aField['name']] );
+				
 				$aField['state'] = $aField['instance']->isValid()? 'valid': 'invalid';
 				if ( $aField['state'] == 'invalid' ) {
 					$bIsValid = false;
