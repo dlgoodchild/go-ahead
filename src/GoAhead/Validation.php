@@ -99,9 +99,9 @@ class Validation {
 
 	/**
 	 * @param array $aAssocData
-	 * @return bool
+	 * @return Validation
 	 */
-	public function on( array $aAssocData ): bool {
+	public function on( array $aAssocData ): Validation {
 		$bIsValid = true;
 		foreach ( $this->aDefinition as &$aField ) {
 			if ( !isset( $aAssocData[$aField['name']] ) ) {
@@ -116,7 +116,8 @@ class Validation {
 				}
 			}
 		}
-		return ( $this->bIsValid = $bIsValid );
+		$this->bIsValid = $bIsValid;
+		return $this;
 	}
 
 	/**
