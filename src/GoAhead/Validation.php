@@ -118,7 +118,7 @@ class Validation {
 			else {
 				$aField['instance']->setName( $aField['name'] );
 				$aField['instance']->setValue( $aAssocData[$aField['name']] );
-				
+
 				$aField['state'] = $aField['instance']->isValid()? 'valid': 'invalid';
 				if ( $aField['state'] == 'invalid' ) {
 					$bIsValid = false;
